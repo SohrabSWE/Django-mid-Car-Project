@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section>
+    <div class="container mx-auto inner-buynow">
+        <div class="buynow mx-auto">
+            <form method="post">
+                {% csrf_token %}
+                <!-- {{ form|crispy }} -->
+                {% for fm in form %}
+                {{fm.label_tag}}
+                {{fm}}
+                <p class="text-danger p-2">{{fm.errors|striptags}}</p>
+                {% endfor %}
+                <button type="submit" class="btn btn-success mt-3">Purchase</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

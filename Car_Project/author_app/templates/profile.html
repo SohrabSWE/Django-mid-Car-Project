@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1 class="text-center text-info">Welcome To Profile Page</h1>
+<br>
+
+<a class="btn btn-primary" href="{% url 'edit_profile' %}" style="margin: 30px;">Edit Your Profile</a>
+
+<br>
+<div class="col-12 p-3 text-black" style="border: 2px solid rgb(0, 166, 255); border-radius:10px;">
+    <h3 class="text-center">Order History</h3>
+    <table class="table mt-3">
+        <thead class="text-black">
+            <tr>
+                <th scope="col">Brand</th>
+                <th scope="col">Car Title</th>
+                <th scope="col">Purchese Date</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% if historie %}
+            {% for his in historie %}
+            <tr class="text-black">
+                <th scope="row">{{his.car_model.brand}}</th>
+                <td>{{his.car_model.title}}</td>
+                <td>{{his.purchese_date}}</td>
+                <td>{{his.net_quantity}}</td>
+                <td>{{his.total_price}}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-white">No Order Yet</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

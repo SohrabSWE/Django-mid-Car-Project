@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Home Page{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="flex-wrap px-5 pt-3 align-items-center container pt-5">
+        <div class="row">
+            <div class="col-6 pt-4">
+                <h2 class="text-danger text-center">Welcome To | My Car Project</h2>
+                <h4 class="text-black">Finding yourself a little worried about heading out onto the road as a newly licensed driver? You’re far from alone. A 2023 survey found that 26.5% of UK drivers consider themselves nervous or anxious drivers, rising to over 50% when including those who sometimes feel that way.</h4>
+                {% if not user.is_authenticated %}
+                <h1><a class="btn btn-outline-info text-white bg-dark" href="{% url 'user_login' %}">Shop Now>></a></h1>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                <img style="width: 480px; height: 440px; border-radius: 10px" src="{% static 'car1.jpg' %}" alt="pic">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h1 class="text-center text-info pt-5">Our Products</h1>
+    {% if user.is_authenticated %}
+    <div>
+        <br>
+        <div class="bg-dark p-5 container" style="border-radius: 10px;">
+            <h4 class="text-center text-white"><b>All Category!</b></h4>
+            <div class="d-flex flex-warp pt-2 gap-5 container">
+                {% for cat in category %}
+                <div class="form-check">
+                    <input class="form-check-input" type="hidden" name="category" id="{{cat.id}}">
+                    <label class="form-check-label" for="{{cat.id}}">
+                        <b><a href="{% url 'category_wise_post' cat.slug %}"
+                                class="text-decoration-none btn btn-outline-light btn-sm">{{cat.name}}</a></b>
+                    </label>
+                </div>
+                {% endfor %}
+                <input class="form-check-input" type="hidden" name="category" id="{{cat.id}}">
+                <label for="{{cat.id}}">
+                    <b><a class="btn btn-outline-light btn-sm" style="text-decoration: none;" href="{% url 'home' %}">All</a></b>
+                </label>
+            </div>
+        </div>
+        {% endif %}
+        <br>
+        <div class="col-12 container">
+            {% if not user.is_authenticated %}
+            <div class="d-flex flex-wrap pt-2">
+                {% for post in unauthenticated_user %}
+                <div class="col-sm-3">
+                    <div class="card mx-3 bg-dark" style="border-radius: 10px">
+                        <div class="card-body" style="width: 270px; height: 400px;">
+                            <img src="{{post.image.url}}" class="card-img-top rounded d-block" alt="pic"
+                                style="width: 200px; height:200px; border-radius:10px;">
+                            <h5 class="card-title text-info">{{post.title}}</h5>
+                            <p class="card-text text-danger">Brand : {{post.brand}}</p>
+                            <p class="text-warning">Price : {{post.price}}</p>
+                            <a href="{% url 'detail_post' post.id %}" class="btn btn-success">Show Details</a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="d-flex flex-warp pt-2 container">
+                <div class="col-12">
+                    <h3 class="text-black">{{authenticated_user | length}} Result Founds!!!</h3>
+                    <div class="d-flex flex-wrap pt-2">
+                        {% for post in authenticated_user %}
+                        <div class="col-sm-3">
+                            <div class="card mx-2 bg-dark" style="border-radius: 10px;">
+                                <div class="card-body" style="width: 270px; height: 450px">
+                                    <img src="{{post.image.url}}" class="card-img-top rounded d-block" alt="pic"
+                                        style="width: 200px; height:200px; border-radius:10px;">
+                                    <h5 class="card-title card-text text-info">{{post.title}}</h5>
+                                    <p class="card-brand card-text text-danger">Brand : {{post.brand}}</p>
+                                    <p class="card-price text-warning">Price : {{post.price}}</p>
+                                    <a href="{% url 'detail_post' post.id %}"
+                                        class="card-text card-button btn btn-success">Show Details</a>
+                                    <p class="text-white">Category :
+                                        {% for cat in post.category.all %}
+                                        <button class="btn btn-primary btn-sm m-2" disabled>{{cat.name}}</button>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
